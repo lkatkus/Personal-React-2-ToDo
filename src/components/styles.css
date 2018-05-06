@@ -1,0 +1,17 @@
+.taskContainer{
+    background-color: grey;
+    padding: 10px;
+}
+
+.task{
+    padding: 10px;
+    margin: 10px;
+    
+    background-color: pink;
+    color: blue;
+}
+
+.newTaskButton{
+    background-color: blue;
+    color: white;
+}
