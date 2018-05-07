@@ -26,11 +26,43 @@ class TaskContainer extends Component {
             this.state.tasks.map((item,i)=>{
                 return(
                     <div key={i}>
-                        <Task taskData = {item} />
+                        <Task id={i} taskData = {item} deleteTask={this.deleteTask} finishTask={this.finishTask}/>
                     </div>
                 )
             })
         )
+    }
+
+    deleteTask = (id) => {
+        // CREATE PLACEHOLDER ARRAY FOR CHANGING
+        let newTasksList = this.state.tasks;
+
+        // REMOVE TASK FROM TASK ARRAY BY INDEX
+        newTasksList.splice(id,1);
+
+        // UPDATE STATE
+        this.setState({
+            tasks: newTasksList
+        },()=>{
+            // ADD CONFIRMATION MESSAGE
+            this.props.changeMessage('Task deleted');
+        })
+    }
+
+    finishTask = (id) => {
+        // CREATE PLACEHOLDER ARRAY FOR CHANGING
+        let newTasksList = this.state.tasks;
+        
+        // UPDATE TASK STATUS
+        newTasksList[id].status = 'Finished';
+        
+        // UPDATE STATE
+        this.setState({
+            tasks: newTasksList
+        },()=>{
+            // ADD CONFIRMATION MESSAGE
+            this.props.changeMessage('Task finished');
+        })
     }
     
     newTaskButton = () => {
@@ -38,7 +70,8 @@ class TaskContainer extends Component {
             this.setState({
                 tasks: [...this.state.tasks, {task:`New Task ${this.state.num}`, status:'Urgent'}]
             },() => {
-                console.log(this.state.tasks)
+                // ADD CONFIRMATION MESSAGE
+                this.props.changeMessage('Task added');
                 this.setState({
                     num: this.state.num + 1
                 })
