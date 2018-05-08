@@ -18,9 +18,13 @@ class TaskContainer extends Component {
             {task:'Plan summer vacation', status:'In progress'},
             {task:'Build a house', status:'In progress'}
         ],
-        num: 1 /* HELPER FOR TESTING */
+        formData: {
+            taskContent: '',
+            taskPriority: ''
+        }
     }
 
+    // Function - Renders tasks from state.tasks
     renderTasks = () => {
         return(
             this.state.tasks.map((item,i)=>{
@@ -33,6 +37,7 @@ class TaskContainer extends Component {
         )
     }
 
+    // Function - deletes task
     deleteTask = (id) => {
         // CREATE PLACEHOLDER ARRAY FOR CHANGING
         let newTasksList = this.state.tasks;
@@ -49,6 +54,7 @@ class TaskContainer extends Component {
         })
     }
 
+    // Function - sets task status to finished
     finishTask = (id) => {
         // CREATE PLACEHOLDER ARRAY FOR CHANGING
         let newTasksList = this.state.tasks;
@@ -65,7 +71,10 @@ class TaskContainer extends Component {
         })
     }
     
+    // Function - adds a 'add new task' button
     newTaskButton = () => {
+        
+        // Method - creates new task and adds tasks array
         const addNewTask = () => {
             this.setState({
                 tasks: [...this.state.tasks, {task:`New Task ${this.state.num}`, status:'Urgent'}]
@@ -78,9 +87,60 @@ class TaskContainer extends Component {
             } );
         }
 
+        const updateFormState = (event) => {
+            
+            let newFormData = {
+                ...this.state.formData
+            }
+
+            let key = event.target.id;
+            let value = event.target.value;
+
+            newFormData[key] = value;
+
+            this.setState({
+                formData: newFormData
+            })
+        }
+
+        const submitForm = (event) => {
+            event.preventDefault();
+
+            this.setState({
+                tasks: [...this.state.tasks, {task:`${this.state.formData.taskContent}`, status:`${this.state.formData.taskPriority}`}]
+            },() => {
+                // Add confirmation message after adding new task
+                this.props.changeMessage('Task added');
+                
+                // Reset form data after adding task
+                this.setState({
+                    formData:{
+                        taskContent: '',
+                        taskPriority: ''
+                    }
+                })
+            });         
+        }
+
         return(
-            <div className='newTaskButton' onClick={addNewTask}>
-                Add new tasks
+            <div className='newTaskButton'>
+                <form onSubmit={(event) => { submitForm(event) }}>
+
+                    <div>
+                        <label htmlFor="taskContent">Task description</label>
+                        <input id="taskContent" name="taskContent" onChange={ (event) => { updateFormState(event) } } />
+                    </div>
+
+                    <div>
+                        <label htmlFor="taskPriority">Task priority</label>
+                        <select id="taskPriority" name="taskPriority" onChange={ (event) => { updateFormState(event) } }>
+                            <option>Normal</option>
+                            <option>Urgent</option>
+                            <option>Critical</option>
+                        </select>
+                    </div>
+
+                </form>
             </div>
         )
     }

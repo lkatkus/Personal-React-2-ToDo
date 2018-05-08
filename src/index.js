@@ -15,14 +15,6 @@ class App extends Component {
         message:''
     }
 
-    checkMessage = () => {
-        return (
-            <div>
-               derp
-            </div>
-        )
-    }
-
     render(){ 
         return(
             <div className='mainContainer'>
@@ -32,9 +24,13 @@ class App extends Component {
                     changeMessage={(newMessage)=>{
                         this.setState({
                             message:newMessage
-                        }, () =>{
-                            console.log(this.state.message);
-                            console.log(this.state)
+                        }, () => {
+                            // REMOVE MESSAGE AFTER TIMEOUT
+                            setTimeout(()=>{
+                                this.setState({
+                                    message:''
+                                })
+                            }, 2000)
                         })
                     }}
                 />
